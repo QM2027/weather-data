@@ -52,7 +52,8 @@ const mid = (() => {
   return `${kst(t.hour + 2).date}1800`;
 })();
 const today = kst().date;
-const weekAgo = kst(24 * 7).date;
+// The warnings list only goes back six days.
+const weekAgo = kst(24 * 5).date;
 
 const KMA = "https://apis.data.go.kr/1360000";
 const TOUR = "https://apis.data.go.kr/B551011";

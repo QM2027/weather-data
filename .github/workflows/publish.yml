@@ -1,0 +1,59 @@
+name: Publish weather
+
+# Fetches the venue weather from data.go.kr and deploys it to GitHub Pages at
+# https://qm2027.github.io/weather-data/weather.json. Nothing is committed.
+#
+#   schedule     → hourly at :50 (the KMA nowcast is out at :40, AirKorea's hour after :15)
+#   push / manual → publish now
+# A source that fails keeps the published section; the run itself never fails for that.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: "50 * * * *"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Don't cancel: a queued run must not cancel one that is publishing.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - id: pages
+        uses: actions/configure-pages@v5
+
+      - run: node --test
+
+      - run: node scripts/sync.mjs
+        env:
+          PREVIOUS_URL: ${{ steps.pages.outputs.base_url }}
+          # Organization secret shared with this repository and tour-data: the data.go.kr general
+          # key (the Encoding or the Decoding form both work).
+          DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

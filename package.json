@@ -1,0 +1,10 @@
+{
+  "name": "weather-data",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "sync": "node scripts/sync.mjs",
+    "test": "node --test"
+  }
+}

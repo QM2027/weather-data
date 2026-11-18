@@ -26,7 +26,7 @@ jobs:
         with:
           node-version: 24
       - uses: actions/configure-pages@v5
-      - run: node scripts/probe.mjs
+      - run: node scripts/probe.mjs && node scripts/dump.mjs
         env:
           # Organization or repository secret: the data.go.kr general key (Decoding or Encoding).
           DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}

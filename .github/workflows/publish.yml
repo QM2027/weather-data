@@ -3,15 +3,14 @@ name: Publish weather
 # Fetches the venue weather from data.go.kr and deploys it to GitHub Pages at
 # https://qm2027.github.io/weather-data/weather.json. Nothing is committed.
 #
-#   schedule     → hourly at :50 (the KMA nowcast is out at :40, AirKorea's hour after :15)
+#   hourly at :50 → the qm2027-trigger Cloudflare Worker dispatches this workflow (the KMA nowcast
+#                   is out at :40, AirKorea's hour after :15). No GitHub schedule: it runs late.
 #   push / manual → publish now
 # A source that fails keeps the published section; the run itself never fails for that.
 on:
   push:
     branches: [main]
   workflow_dispatch:
-  schedule:
-    - cron: "50 * * * *"
 
 permissions:
   contents: read

@@ -51,7 +51,8 @@ Grades are AirKorea's 1 good, 2 moderate, 3 bad, 4 very bad, for the hourly valu
 
 ## Schedule and key
 
-`publish.yml` runs hourly at :50, on push and by hand (Actions → Publish weather → Run workflow).
+`publish.yml` runs hourly at :50 (dispatched by the `qm2027-trigger` Cloudflare Worker; there is
+no GitHub schedule), on push and by hand (Actions → Publish weather → Run workflow).
 The key is the `DATA_GO_KR_KEY` Actions secret (organization secret shared with this repository
 and `tour-data`). Never commit it; the script redacts it from anything it logs or publishes.
 
